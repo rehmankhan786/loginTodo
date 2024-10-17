@@ -6,7 +6,7 @@ require("cookie-parser");
 const tokenAuth = async (req, res, next) => {
   const token = req.cookies.token;
   if (token) {
-    const verifiedData =  jwt.verify(token, process.env.secret);
+    const verifiedData = jwt.verify(token, process.env.secret);
     if (verifiedData) {
       req.user = verifiedData;
       // return res.json({ success: true, verifiedData });
@@ -14,11 +14,16 @@ const tokenAuth = async (req, res, next) => {
       next();
     } else {
       next(
-        new errorHandlerClass("miscellensous error / error in verifying User", 401)
+        new errorHandlerClass(
+          "miscellensous error / error in verifying User",
+          401
+        )
       );
     }
   } else {
-    return res.status(401).json({ status: "UnAuthorized User/Token ",message:"Login first" });
+    return res
+      .status(401)
+      .json({ status: "UnAuthorized User/Token ", message: "Login first" });
   }
   // next();
 };
@@ -27,11 +32,10 @@ const checkToken = async (req, res, next) => {
   if (token) {
     // console.log(token)
     tokenAuth(req, res, next);
-    const verifiedData =  jwt.verify(token,process.env.secret)
+    const verifiedData = jwt.verify(token, process.env.secret);
 
     if (verifiedData) {
       req.user = verifiedData;
-
     } else {
       next(
         new errorHandlerClass("miscellensous error / usAuthorized user", 401)
@@ -42,5 +46,26 @@ const checkToken = async (req, res, next) => {
   }
   // next();
 };
+const afterLoginToken = (req, res, next) => {
+  const token = req.cookies.token;
+  if (token) {
+    // console.log(token)
+    // tokenAuth(req, res, next);
+    return res.status(400).json({success:false,message:"cannot signUp already logged In"})
+    const verifiedData = jwt.verify(token, process.env.secret);
 
-module.exports = { tokenAuth, checkToken };
+    if (verifiedData) {
+      req.user = verifiedData;
+    } else {
+      next(
+        new errorHandlerClass("miscellensous error / usAuthorized user", 401)
+      );
+    }
+  } else {
+    return res
+      .status(401)
+      .json({ status: "UnAuthorized User/Token ", message: "Login first" });
+  }
+};
+
+module.exports = { tokenAuth, checkToken ,afterLoginToken};

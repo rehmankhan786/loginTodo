@@ -8,12 +8,12 @@ const {
   signUp,
 } = require("../controllers/usercontroller");
 const catchAsyncError = require("../middlewares/catchAsyncError");
-const { tokenAuth, checkToken } = require("../middlewares/tokenAuth");
+const { tokenAuth, checkToken, afterLoginToken } = require("../middlewares/tokenAuth");
 const { signUpValidation } = require("../middlewares/validation");
 const userRouter = express.Router();
 userRouter.post(
   "/signup",
-  catchAsyncError(checkToken),
+  catchAsyncError(afterLoginToken),
   catchAsyncError(signUpValidation),
   catchAsyncError(signUp)
 );

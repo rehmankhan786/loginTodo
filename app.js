@@ -24,7 +24,8 @@ const tokenAuth = require("./middlewares/tokenAuth");
 // const userModel = require("./models/userModel")
 const userRouter = require("./routes/userRoutes");
 const { errorhandler } = require("./middlewares/errorMiddleware");
-const taskRoutes  =require("./routes/taskRoutes")
+const taskRoutes  =require("./routes/taskRoutes");
+const { allUser } = require("./controllers/usercontroller");
 const app = express();
 const port = process.env.port || 4000;
 
@@ -40,6 +41,11 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
+app.get("/",(req,res,next)=>{
+  res.status(200).send("<h1>Homepage</h1>")
+})
+app.get("/users",allUser)
 app.use('/task',taskRoutes)
 app.use("/user", userRouter);
 

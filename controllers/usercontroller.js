@@ -53,8 +53,8 @@ const signUp = async (req, res, next) => {
     let hashed_pass = await bcrypt.hash(password, 10);
     let clientData = new userModel({ email, username, password: hashed_pass });
     await clientData.save();
-    genToken({ clientData }, res);
-    // return res.cookie("token").json({ status: "success", clientData });
+    loginUser(req,res,next);
+
   }
 };
 module.exports = { allUser, findUserById, loginUser, logOutUser, signUp };
