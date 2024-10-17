@@ -1,0 +1,7 @@
+{
+    "version":1,
+    "name":"fom-validaiton",
+    "builds":[{"src":"server.js","use":"@vercel/node"}],
+    "routes":[{"src":"/(.*)","dest":"/server.js"}]
+
+}
