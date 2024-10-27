@@ -33,7 +33,7 @@ const checkToken = async (req, res, next) => {
     // console.log(token)
     tokenAuth(req, res, next);
     const verifiedData = jwt.verify(token, process.env.secret);
-
+    
     if (verifiedData) {
       req.user = verifiedData;
     } else {
@@ -42,6 +42,7 @@ const checkToken = async (req, res, next) => {
       );
     }
   } else {
+    // tokenAuth(req, res, next);
     next();
   }
   // next();

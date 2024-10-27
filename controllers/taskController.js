@@ -23,13 +23,11 @@ const deleteCurrentTask = async (req, res, next) => {
       .status(200)
       .json({ taskRquest: "Delete", message: "Success", task });
   } else {
-    return res
-      .status(404)
-      .json({
-        taskRquest: "Delete",
-        message: "failure",
-        status: "No Such Task Founded",
-      });
+    return res.status(404).json({
+      taskRquest: "Delete",
+      message: "failure",
+      status: "No Such Task Founded",
+    });
   }
 };
 const getSelectedTask = async (req, res, next) => {
@@ -40,9 +38,9 @@ const getSelectedTask = async (req, res, next) => {
 const updateCurrentTask = async (req, res, next) => {
   const id = req.params.id;
   let currentTask = await taskModel.findOne({ _id: id });
-
+  console.log(id);
   if (currentTask) {
-    currentTask.isCompleted = true;
+    currentTask.isCompleted = !currentTask.isCompleted ;
     await currentTask.save();
     res.status(200).json({ success: true, currentTask });
     await currentTask.save();
