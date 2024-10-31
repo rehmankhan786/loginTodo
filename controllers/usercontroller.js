@@ -50,7 +50,17 @@ const loginUser = async (req, res, next) => {
   }
 };
 const logOutUser = (req, res, next) => {
-  clearToken(req,res,next);
+  console.log("Cookie Cleared");
+  return res
+    .status(200)
+    .cookie("totka", "", {
+      httpOnly: true,
+      // maxAge: 1,
+      // expires: new Date(Date.now()),
+      sameSite: process.env.NODE_ENV == "development" ? "lax" : "none",
+      secure: process.env.NODE_ENV == "development" ? false : true,
+    })
+    .json({ success: true, message: "logOut successfully", cookie: "" });
 };
 
 const signUp = async (req, res, next) => {

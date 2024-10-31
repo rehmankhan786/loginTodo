@@ -38,7 +38,7 @@ const getSelectedTask = async (req, res, next) => {
 const updateCurrentTask = async (req, res, next) => {
   const id = req.params.id;
   let currentTask = await taskModel.findOne({ _id: id });
-  console.log(id);
+  // console.log(id);
   if (currentTask) {
     currentTask.isCompleted = !currentTask.isCompleted ;
     await currentTask.save();

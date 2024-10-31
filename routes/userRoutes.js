@@ -28,7 +28,7 @@ userRouter.get(
   catchAsyncError(allUser)
 );
 userRouter.post("/login", catchAsyncError(checkToken), loginUser);
-userRouter.get("/logout",  logOutUser);
+userRouter.get("/logout", logOutUser);
 // userRouter.post("/signup", router);
 // userRouter.put("/forgotpass", router);
 
@@ -45,7 +45,7 @@ userRouter.get(
       // console.log(req.cookies);
       next();
     } else {
-      console.log('no cookies founded')
+      console.log("no cookies founded");
       return res.status(400).json({ message: "Login first" });
     }
     // console.log(req.cookies.token);
