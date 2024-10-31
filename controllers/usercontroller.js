@@ -51,16 +51,7 @@ const loginUser = async (req, res, next) => {
 };
 const logOutUser = (req, res, next) => {
   console.log("Cookie Cleared");
-  return res
-    .status(200)
-    .clearCookie("token", "", {
-      httpOnly: true,
-      // maxAge: 1,
-      // expires: new Date(Date.now()),
-      sameSite:  "none",
-      secure:  true,
-    })
-    .json({ success: true, message: "logOut successfully", cookie: "" });
+  clearToken(req,res,next);
 };
 
 const signUp = async (req, res, next) => {

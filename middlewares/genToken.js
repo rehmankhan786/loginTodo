@@ -7,19 +7,20 @@ const secret_key = process.env.secret;
 
 const genToken = async (user, res) => {
   let { email } = user;
+
   console.log(email);
   const data = await userModel.findOne({ email }).select("+password");
   const token = jwt.sign(user, process.env.secret);
   console.log(process.env.NODE_ENV);
-
+  const isProduction = process.env.NODE_ENV === "production";
   return res
     .cookie("token", token, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60,
-      // sameSite: process.env.NODE_ENV == "development" ? "Lax" : "None",
-      // secure: process.env.NODE_ENV == "development" ? false : true,
-      sameSite: "None",
-      secure: true,
+      sameSite: process.env.NODE_ENV === "development" ? "Lax" : "None",
+      secure: process.env.NODE_ENV === "development" ? false : true,
+      // sameSite: "None",
+      // secure: isProduction,
     })
     .json({
       success: true,
@@ -32,12 +33,11 @@ const clearToken = async (req, res, next) => {
   console.log("Cookie Cleared");
   return res
     .status(200)
-    .cookie("token", "", {
+    .clearCookie("token", {
       httpOnly: true,
-      // maxAge: 1,
-      expires: new Date(Date.now()),
-      sameSite:  "none",
-      secure:  true,
+      expires: new Date(0),
+      sameSite: process.env.NODE_ENV === "development" ? "Lax" : "None",
+      secure: process.env.NODE_ENV === "development" ? false : true,
     })
     .json({ success: true, message: "logOut successfully", cookie: "" });
 };
