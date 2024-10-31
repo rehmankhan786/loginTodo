@@ -7,8 +7,6 @@ const { errorHandlerClass } = require("../middlewares/errorMiddleware");
 const { genToken, clearToken } = require("../middlewares/genToken");
 const jwt = require("jsonwebtoken");
 
-
-
 const allUser = async (req, res, next) => {
   const alluser = await userModel.find({}).select("+password");
   return res.status(200).json(alluser);
@@ -18,13 +16,16 @@ const findUserById = async (req, res) => {
   res.json(userData);
   next();
 };
-const findUserByCookie = async (req, res,next) => {
+const findUserByCookie = async (req, res, next) => {
   const userCookie = req.cookies.token;
-  const cookieData = jwt.verify(userCookie, process.env.secret);
-  const userData = await userModel.findOne({ email: cookieData.email });
-
-  res.status(200).json(userData);
-  next();
+  try {
+    const cookieData = jwt.verify(userCookie, process.env.secret);
+    const userData = await userModel.findOne({ email: cookieData.email });
+    return res.status(200).json(userData);
+    // next();
+  } catch (error) {
+    clearToken(req,res,next)
+  }
 };
 const loginUser = async (req, res, next) => {
   if (req.user) {
@@ -40,7 +41,7 @@ const loginUser = async (req, res, next) => {
     const isMatch = await bcrypt.compare(password, userData.password);
     if (isMatch) {
       const nec_user_details = { email: userData.email, id: userData._id };
-      const token = await genToken(nec_user_details, res);
+       await genToken(nec_user_details, res);
       // console.log(token)
     } else {
       return res.status(401).json({ message: "incorrect email or password" });
@@ -49,10 +50,11 @@ const loginUser = async (req, res, next) => {
     next(new errorHandlerClass("invalid credentials", 401));
   }
 };
-const logOutUser = (req, res, next) => {
-  console.log("Cookie Cleared");
-  clearToken(req,res,next);
-};
+// const logOutUser = (req, res, next) => {
+//   console.log("Cookie Cleared");
+//   clearToken(req,res,next);
+// };
+const logOutUser = (req, res, next) => clearToken(req, res, next);
 
 const signUp = async (req, res, next) => {
   const { email, password, username } = req.body;
@@ -74,5 +76,4 @@ module.exports = {
   logOutUser,
   signUp,
   findUserByCookie,
-  
 };

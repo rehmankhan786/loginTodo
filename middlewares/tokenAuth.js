@@ -9,7 +9,6 @@ const tokenAuth = async (req, res, next) => {
     const verifiedData = jwt.verify(token, process.env.secret);
     if (verifiedData) {
       req.user = verifiedData;
-      // return res.json({ success: true, verifiedData });
 
       next();
     } else {
@@ -23,9 +22,14 @@ const tokenAuth = async (req, res, next) => {
   } else {
     return res
       .status(401)
+      .clearCookie("token", {
+        httpOnly: true,
+        expires: new Date(0),
+        sameSite: process.env.NODE_ENV === "development" ? "Lax" : "None",
+        secure: process.env.NODE_ENV === "development" ? false : true,
+      })
       .json({ status: "UnAuthorized User/Token ", message: "Login first" });
   }
-  // next();
 };
 const checkToken = async (req, res, next) => {
   const token = req.cookies.token;
@@ -33,7 +37,7 @@ const checkToken = async (req, res, next) => {
     // console.log(token)
     tokenAuth(req, res, next);
     const verifiedData = jwt.verify(token, process.env.secret);
-    
+
     if (verifiedData) {
       req.user = verifiedData;
     } else {
@@ -48,7 +52,9 @@ const checkToken = async (req, res, next) => {
 const afterLoginToken = (req, res, next) => {
   const token = req.cookies.token;
   if (token) {
-    return res.status(400).json({success:false,message:"cannot signUp already logged In"})
+    return res
+      .status(400)
+      .json({ success: false, message: "cannot signUp already logged In" });
   } else {
     return res
       .status(401)
@@ -56,4 +62,4 @@ const afterLoginToken = (req, res, next) => {
   }
 };
 
-module.exports = { tokenAuth, checkToken ,afterLoginToken};
+module.exports = { tokenAuth, checkToken, afterLoginToken };
