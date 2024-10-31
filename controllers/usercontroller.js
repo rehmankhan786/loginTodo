@@ -53,7 +53,7 @@ const logOutUser = (req, res, next) => {
   console.log("Cookie Cleared");
   return res
     .status(200)
-    .cookie("token", "", {
+    .clearCookie("token", "", {
       httpOnly: true,
       // maxAge: 1,
       // expires: new Date(Date.now()),
