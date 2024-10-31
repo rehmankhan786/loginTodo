@@ -9,13 +9,8 @@ const genToken = async (user, res) => {
   let {email} = user;
   console.log(email)
   const data = await userModel.findOne({email}).select("+password");
-  // const getUserdata = async () => {
-  //   // console.log(data);
-  // };
   const token = jwt.sign(user, process.env.secret);
 
-  // let userData = await getUserdata(user.email);
-  // console.log(userData)
   return res
     .cookie("token", token, {
       httpOnly: true,
@@ -24,5 +19,17 @@ const genToken = async (user, res) => {
       secure: process.env.NODE_ENV == "development" ? false : true,
     })
     .json({ success: true, message: "login successfully", cookie: token,data });
-};
-module.exports = { genToken };
+  };
+  const clearToken =async(req,res,next)=>{
+    console.log("Cookie Cleared")
+  return res
+    .cookie("token", "", {
+      httpOnly: true,
+      maxAge: 1,
+      sameSite: process.env.NODE_ENV == "development" ? "lax" : "none",
+      secure: process.env.NODE_ENV == "development" ? false : true,
+    })
+    .json({ success: true, message: "logOut successfully", cookie: "" });
+
+}
+module.exports = { genToken ,clearToken};

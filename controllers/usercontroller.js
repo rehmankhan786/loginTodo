@@ -4,7 +4,7 @@ const cors = require("cors");
 const userModel = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const { errorHandlerClass } = require("../middlewares/errorMiddleware");
-const { genToken } = require("../middlewares/genToken");
+const { genToken, clearToken } = require("../middlewares/genToken");
 const jwt = require("jsonwebtoken");
 
 
@@ -50,13 +50,7 @@ const loginUser = async (req, res, next) => {
   }
 };
 const logOutUser = (req, res, next) => {
-  res
-    .cookie("token", "", {
-      expires: new Date(Date.now()),
-      sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
-      secure: process.env.NODE_ENV === "development" ? false : true,
-    })
-    .json({ message: "logged Out successfully" });
+  clearToken(req,res,next);
 };
 
 const signUp = async (req, res, next) => {
