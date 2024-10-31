@@ -42,26 +42,13 @@ const checkToken = async (req, res, next) => {
       );
     }
   } else {
-    // tokenAuth(req, res, next);
     next();
   }
-  // next();
 };
 const afterLoginToken = (req, res, next) => {
   const token = req.cookies.token;
   if (token) {
-    // console.log(token)
-    // tokenAuth(req, res, next);
     return res.status(400).json({success:false,message:"cannot signUp already logged In"})
-    const verifiedData = jwt.verify(token, process.env.secret);
-
-    if (verifiedData) {
-      req.user = verifiedData;
-    } else {
-      next(
-        new errorHandlerClass("miscellensous error / usAuthorized user", 401)
-      );
-    }
   } else {
     return res
       .status(401)

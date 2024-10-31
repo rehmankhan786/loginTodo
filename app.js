@@ -42,7 +42,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res, next) => {
-  res.status(200).send("<h1>Homepage</h1>");
+  res.status(200).redirect(`${process.env.FRONTEND_URL}/login`);
 });
 app.get("/users", allUser);
 app.use("/task", taskRoutes);

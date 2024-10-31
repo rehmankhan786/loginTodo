@@ -27,7 +27,7 @@ const genToken = async (user, res) => {
     .cookie("token", "", {
       // httpOnly: true,
       // maxAge: 1,
-      expired:new Date(Date.now()),
+      expires:new Date(Date.now()),
       // sameSite: process.env.NODE_ENV == "development" ? "lax" : "none",
       // secure: process.env.NODE_ENV == "development" ? false : true,
     })
