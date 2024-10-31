@@ -57,8 +57,8 @@ const logOutUser = (req, res, next) => {
       httpOnly: true,
       // maxAge: 1,
       // expires: new Date(Date.now()),
-      sameSite: process.env.NODE_ENV == "development" ? "lax" : "none",
-      secure: process.env.NODE_ENV == "development" ? false : true,
+      sameSite:  "none",
+      secure:  true,
     })
     .json({ success: true, message: "logOut successfully", cookie: "" });
 };
