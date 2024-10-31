@@ -28,7 +28,7 @@ userRouter.get(
   catchAsyncError(allUser)
 );
 userRouter.post("/login", catchAsyncError(checkToken), loginUser);
-userRouter.get("/logout", catchAsyncError(tokenAuth), logOutUser);
+userRouter.get("/logout",  logOutUser);
 // userRouter.post("/signup", router);
 // userRouter.put("/forgotpass", router);
 
@@ -42,7 +42,7 @@ userRouter.get(
   "/profile",
   (req, res, next) => {
     if (req.cookies.token) {
-      console.log(req.cookies);
+      // console.log(req.cookies);
       next();
     } else {
       console.log('no cookies founded')

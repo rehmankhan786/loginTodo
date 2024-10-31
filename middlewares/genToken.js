@@ -16,16 +16,17 @@ const genToken = async (user, res) => {
     .cookie("token", token, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60,
-      sameSite: process.env.NODE_ENV == "development" ? "Lax" : "None",
-      secure: process.env.NODE_ENV == "development" ? false : true,
+      // sameSite: process.env.NODE_ENV == "development" ? "Lax" : "None",
+      // secure: process.env.NODE_ENV == "development" ? false : true,
+      sameSite:  "None",
+      secure: true,
     })
     .json({ success: true, message: "login successfully", cookie: token,data });
   };
   const clearToken =async(req,res,next)=>{
     console.log("Cookie Cleared")
-  return res
-    .cookie("token", "", {
-      // httpOnly: true,
+  return res.status(200).cookie("token", "", {
+      httpOnly: true,
       // maxAge: 1,
       expires:new Date(Date.now()),
       sameSite: process.env.NODE_ENV == "development" ? "lax" : "none",
