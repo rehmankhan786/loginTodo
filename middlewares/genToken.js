@@ -15,8 +15,8 @@ const genToken = async (user, res) => {
     .cookie("token", token, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60,
-      sameSite: process.env.NODE_ENV == "development" ? "lax" : "none",
-      secure: process.env.NODE_ENV == "development" ? false : true,
+      sameSite: process.env.NODE_ENV == "production" ? "lax" : "none",
+      secure: process.env.NODE_ENV == "production" ? false : true,
     })
     .json({ success: true, message: "login successfully", cookie: token,data });
   };
@@ -25,7 +25,8 @@ const genToken = async (user, res) => {
   return res
     .cookie("token", "", {
       httpOnly: true,
-      maxAge: 1,
+      // maxAge: 1,
+      expired:Date(Date.now()),
       sameSite: process.env.NODE_ENV == "development" ? "lax" : "none",
       secure: process.env.NODE_ENV == "development" ? false : true,
     })
